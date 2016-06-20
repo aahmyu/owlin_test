@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-6">
+        <p-accordion *ngFor="let article of newsArr">
+            <p-menu [model]="items"></p-menu>
+            <p-accordionTab header="{{article.title}}">
+                {{article.kwic}}
+                <span>pin to</span>
+                    <select [(ngModel)]="selectedBoard">
+                        <option *ngFor="let pin of pinboards let i = index" [ngValue]="pin">Pinboard {{i}}</option>
+                    </select>
+                <button class="btn btn-default" (click)="pinArticle(article)">Pin</button>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary" (click)="newPinBoard()">Create new pinboard</button>
+    </div>
+    <div class="col-md-4">
+        <div *ngFor="let pinboard of pinboards let i = index">
+            <p-panel [toggleable]="true" [collapsed]="true">
+                <header>
+                    <div class="row">
+                        <div class="col-md-8">
+                            Pinboard {{i}}
+                        </div>
+                        <div class="col-md-4 btn-group">
+                            <button class="bpad pull-right" (click)="deleteBoard(i,pinboard._id)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                            <button class="pull-right" (click)="getAllPinned(i,pinboard._id)"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </header>
+                <div *ngFor="let pinned of pinboards[i].pins let ind = index">
+                    <p-panel [toggleable]="true" [collapsed]="true">
+                        <header>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    {{pinned.title}}
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="bpad pull-right" (click)="unpin(pinboard._id,pinned._id)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </header>
+                        {{pinned.kwic}}
+                    </p-panel>
+                </div>
+            </p-panel>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Pinned Items" [(visible)]="display">
+    {{pins}}
+</p-dialog>
